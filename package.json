@@ -1,0 +1,25 @@
+{
+  "name": "electron",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --ext js,css,html --exec electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Khalidabdi1/electron-js-learn.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Khalidabdi1/electron-js-learn/issues"
+  },
+  "homepage": "https://github.com/Khalidabdi1/electron-js-learn#readme",
+  "description": "",
+  "devDependencies": {
+    "electron": "^38.3.0",
+    "nodemon": "^3.1.10"
+  }
+}
