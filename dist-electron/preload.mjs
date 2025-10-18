@@ -1,22 +1,9 @@
 "use strict";
 const electron = require("electron");
-electron.contextBridge.exposeInMainWorld("ipcRenderer", {
-  on(...args) {
-    const [channel, listener] = args;
-    return electron.ipcRenderer.on(channel, (event, ...args2) => listener(event, ...args2));
-  },
-  off(...args) {
-    const [channel, ...omit] = args;
-    return electron.ipcRenderer.off(channel, ...omit);
-  },
-  send(...args) {
-    const [channel, ...omit] = args;
-    return electron.ipcRenderer.send(channel, ...omit);
-  },
-  invoke(...args) {
-    const [channel, ...omit] = args;
-    return electron.ipcRenderer.invoke(channel, ...omit);
-  }
+electron.contextBridge.exposeInMainWorld("electronAPI", {
+  test: () => electron.ipcRenderer.send("test"),
+  CreateFile: (fileName, content) => electron.ipcRenderer.send("create-file", fileName, content),
+  fileResponse: (callBack) => electron.ipcRenderer.on("create-file-response", (_event, massage) => callBack(massage))
   // You can expose other APTs you need here.
   // ...
 });

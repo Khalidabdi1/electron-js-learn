@@ -2,6 +2,7 @@ import { app, BrowserWindow ,ipcMain} from 'electron'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
+import fs from "node:fs"
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -51,4 +52,20 @@ app.whenReady().then(()=>{
 
 ipcMain.on("test",()=>{
  console.log("yes")
+})
+
+
+ipcMain.on("create-file",(event,fileName,content)=>{
+const filepath =path.join(app.getPath("desktop"),fileName)
+
+
+fs.writeFile(filepath,content,(err)=>{
+  if(err){
+    console.log("can't create file")
+    event.reply("create-file-response","error with. create file")
+  }else{
+    console.log("file create it")
+    event.reply("create-file-response","file create it")
+  }
+})
 })
