@@ -1,10 +1,14 @@
 {
+   "files": [],
+
   "compilerOptions": {
+    
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -14,11 +18,19 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+       /* Paths alias (مطلوب من shadcn/ui) */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+    },
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+   
+    
   },
   "include": ["src", "electron"],
   "references": [{ "path": "./tsconfig.node.json" }]

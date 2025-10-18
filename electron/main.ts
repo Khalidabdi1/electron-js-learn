@@ -55,17 +55,3 @@ ipcMain.on("test",()=>{
 })
 
 
-ipcMain.on("create-file",(event,fileName,content)=>{
-const filepath =path.join(app.getPath("desktop"),fileName)
-
-
-fs.writeFile(filepath,content,(err)=>{
-  if(err){
-    console.log("can't create file")
-    event.reply("create-file-response","error with. create file")
-  }else{
-    console.log("file create it")
-    event.reply("create-file-response","file create it")
-  }
-})
-})
