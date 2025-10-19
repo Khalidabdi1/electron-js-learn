@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button'
 import axios from 'axios'
 
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 
 import {
   Card,
@@ -23,18 +25,51 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
+import ShowAlert from '../ShowAlert'
+
 export default function Login() {
 
-  //for login and sign in
-  const [user,Setuser] = useState<{ Password: string, Email: string }>({
-
-    Password: "",
-    Email: ""
+  //show alert
+  const [ShowAlerts, SetShowAlerts] = useState<{ Title: string, Description: string, Show: boolean }>({
+    Title: "",
+    Description: "",
+    Show: false
   })
 
+  //for login and sign in
+  const [user, Setuser] = useState<{ Password: string, Email: string }>({
+
+    Password: "",
+    Email: "",
+
+  })
+
+  //validtion email
+  const emailValidation = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  let emailTest: boolean = true
+
+  if (emailValidation.test(user.Email)) {
+    emailTest = false;
+
+  }
+
+
+
+  const Navigate = useNavigate()
   function Login() {
-    axios.post("http://localhost:3000/Login",user).then((backend) => {
+    axios.post("http://localhost:3000/Login", user).then((backend) => {
       console.log(backend.data.massage)
+      if (backend.data.massage === "user found") {
+        Navigate("/Welcome")
+      } else if (backend.data.massage === "user not found") {
+        SetShowAlerts(prev => ({ ...prev, Title: "user not found ", Description: "Try to sign in to create account ", Show: true }))
+
+        setTimeout(() => {
+          SetShowAlerts(prev => ({ ...prev, Show: false }))
+        }, 3000)
+
+
+      }
     })
 
 
@@ -42,8 +77,8 @@ export default function Login() {
   }
 
 
-  function Signin(){
-    axios.post("http://localhost:3000/Signin",user).then((backend)=>{
+  function Signup() {
+    axios.post("http://localhost:3000/Signup", user).then((backend) => {
       console.log(backend.data)
     })
   }
@@ -53,7 +88,7 @@ export default function Login() {
       <Tabs defaultValue="Login" className="w-[400px]">
         <TabsList>
           <TabsTrigger value="Login">Login</TabsTrigger>
-          <TabsTrigger value="sign in">sign in</TabsTrigger>
+          <TabsTrigger value="Sign up">Sign up</TabsTrigger>
         </TabsList>
         <TabsContent value="Login">
           <Card>
@@ -76,13 +111,13 @@ export default function Login() {
 
             </CardContent>
             <CardFooter>
-              <Button className='w-full' onClick={Login}>Login </Button>
+              <Button className='w-full' onClick={Login} disabled={emailTest}>Login </Button>
             </CardFooter>
           </Card>
         </TabsContent>
 
 
-        <TabsContent value="sign in">
+        <TabsContent value="Sign up">
           <Card>
             <CardHeader>
               <CardTitle>Sign in</CardTitle>
@@ -103,13 +138,15 @@ export default function Login() {
 
             </CardContent>
             <CardFooter>
-              <Button className='w-full' onClick={Signin}>sign in </Button>
+              <Button className='w-full' onClick={Signup}>sign up </Button>
             </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
 
 
+
+      {ShowAlerts.Show === true ? <ShowAlert Title={ShowAlerts.Title} Description={ShowAlerts.Description} /> : null}
 
     </div>
 
