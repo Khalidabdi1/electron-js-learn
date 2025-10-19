@@ -34,7 +34,7 @@ export default function Login() {
 
   function Login() {
     axios.post("http://localhost:3000/Login",user).then((backend) => {
-      console.log(backend.data)
+      console.log(backend.data.massage)
     })
 
 
