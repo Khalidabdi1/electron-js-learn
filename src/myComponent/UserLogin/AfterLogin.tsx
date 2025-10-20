@@ -18,23 +18,49 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { useNavigate } from "react-router-dom"
 
 import { Link } from "react-router-dom"
 
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function AfterLogin() {
-    const [userInfo,SetUserInfo]=useState<{OTP:string,Email:string}>({
-        OTP:"",
-        Email:""
+    let Navigate = useNavigate()
+    const [userInfo, SetUserInfo] = useState<{ OTP: string, Email: (string | null) }>({
+        OTP: "",
+        Email: ""
     })
 
-function verfiyOTP(){
-    axios.post("http://localhost:3000/verfiy",userInfo).then((backend)=>{
-console.log(backend.data.massage)
-    })
-}
+    function verfiyOTP() {
+        axios.post("http://localhost:3000/verfiy", userInfo).then((backend) => {
+            console.log(backend.data.massage)
+
+            const access_TOKEN = backend.data.massage.access_token
+            // const Confirm_user =backend.data.massage.
+
+            localStorage.setItem("access_TOKEN", access_TOKEN)
+
+            if (backend.data?.found ) {
+                Navigate("/Home")
+            }
+
+
+
+
+        })
+    }
+
+    function Storage() {
+        const emails: (string | null) = localStorage.getItem("Email")
+
+        SetUserInfo(prev => ({ ...prev, Email: emails }))
+    }
+
+
+    useEffect(() => {
+        Storage()
+    }, [])
 
     return (
         <div>
@@ -48,9 +74,9 @@ console.log(backend.data.massage)
                     {/* <CardAction>Card Action</CardAction> */}
                 </CardHeader>
                 <CardContent>
-                    <InputOTP maxLength={6} onChange={((e)=>{
+                    <InputOTP maxLength={6} onChange={((e) => {
                         console.log(e)
-                        SetUserInfo(prev=>({...prev,OTP:e}))
+                        SetUserInfo(prev => ({ ...prev, OTP: e }))
                     })} pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
                         <InputOTPGroup>
                             <InputOTPSlot index={0} />
@@ -73,7 +99,7 @@ console.log(backend.data.massage)
 
 
                     <p className="text-neutral-300 w-full mt-5">Go back to
-                        <Link to={"/"}className="p-2" >
+                        <Link to={"/"} className="p-2" >
 
                             <span className="hover:border-b-1 hover:border-white">login page</span>
                         </Link>

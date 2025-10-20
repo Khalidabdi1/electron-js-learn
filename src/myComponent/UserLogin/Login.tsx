@@ -53,10 +53,17 @@ export default function Login() {
 
   }
 
+function LocalStorage(){
 
+  localStorage.setItem("Email",user.Email)
+
+}
 
   const Navigate = useNavigate()
+
   function Login() {
+
+    LocalStorage()
     axios.post("http://localhost:3000/Login", user).then((backend) => {
       console.log(backend.data.massage)
       if (backend.data.massage === "user found") {
